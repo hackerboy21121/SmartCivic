@@ -1,0 +1,555 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SmartCivic</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Leaflet Map CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+</head>
+
+<body>
+
+
+    <!-- ==================================================
+         LOGIN PAGE
+         ================================================== -->
+
+    <section id="loginPage" class="login-page">
+
+        <div class="login-card">
+
+            <div class="login-language">
+                <select id="loginLanguageSelect" onchange="changeLanguage(this.value)" aria-label="Language">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="te">తెలుగు</option>
+                </select>
+            </div>
+
+            <div class="login-logo">
+                <img src="SmartCivic.jpg" alt="SmartCivic logo">
+            </div>
+
+            <h1 data-i18n="brand">SmartCivic</h1>
+
+            <p class="login-subtitle" data-i18n="loginSubtitle">
+                Make your city better, one report at a time.
+            </p>
+
+
+            <div class="login-form">
+
+                <label for="loginEmail" data-i18n="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Enter your email" data-i18n-placeholder="emailPlaceholder"
+                >
+
+
+                <label for="loginPassword" data-i18n="password">
+                    Password
+                </label>
+
+                <div class="password-box">
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Enter your password" data-i18n-placeholder="passwordPlaceholder"
+                    >
+
+                    <button
+                        type="button"
+                        onclick="togglePassword()"
+                    >
+                        👁️
+                    </button>
+
+                </div>
+
+
+                <button
+                    class="login-button"
+                    onclick="loginUser()"
+                >
+                    <span data-i18n="login">Login</span>
+                </button>
+
+
+                <p
+                    id="loginError"
+                    class="login-error"
+                ></p>
+
+            </div>
+
+
+            <div class="demo-login">
+
+                <strong data-i18n="demoLogin">Demo Login</strong>
+
+                <br>
+
+                Email:
+                citizen@civicfix.com
+
+                <br>
+
+                Password:
+                123456
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==================================================
+         MAIN APPLICATION
+         ================================================== -->
+
+    <div id="appPage" class="hidden">
+
+
+        <!-- ==================================================
+             NAVBAR
+             ================================================== -->
+
+        <nav>
+
+            <div class="logo">
+                <img src="SmartCivic.jpg" alt="SmartCivic logo">
+                <span data-i18n="brand">SmartCivic</span>
+            </div>
+
+
+            <div class="language-selector">
+                <select id="languageSelect" onchange="changeLanguage(this.value)" aria-label="Language">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="te">తెలుగు</option>
+                </select>
+            </div>
+
+            <div class="nav-buttons">
+
+                <button onclick="showHome()">
+                    <span data-i18n="home">Home</span>
+                </button>
+
+                <button onclick="showReport()">
+                    <span data-i18n="reportIssue">Report Issue</span>
+                </button>
+
+                <button onclick="showAdmin()">
+                    <span data-i18n="admin">Admin</span>
+                </button>
+
+                <button
+                    class="logout-button"
+                    onclick="logoutUser()"
+                >
+                    <span data-i18n="logout">Logout</span>
+                </button>
+
+            </div>
+
+        </nav>
+
+
+
+        <!-- ==================================================
+             HOME PAGE
+             ================================================== -->
+
+        <section id="homePage">
+
+
+            <!-- HERO -->
+
+            <div class="hero">
+
+                <div class="hero-text">
+
+                    <p class="small-title">
+                        <span data-i18n="smartCity">SMART CITY • COMMUNITY POWERED</span>
+                    </p>
+
+
+                    <h1>
+
+                        <span data-i18n="fixCity">Fix your city,</span>
+
+                        <br>
+
+                        <span>
+                            <span data-i18n="oneReport">one report at a time.</span>
+                        </span>
+
+                    </h1>
+
+
+                    <p>
+
+                        <span data-i18n="heroDescription">Report broken streetlights, garbage overflow and water leakages directly to municipal authorities with photo proof and location.</span>
+
+                    </p>
+
+
+                    <button
+                        class="report-button"
+                        onclick="showReport()"
+                    >
+
+                        <span data-i18n="reportProblem">+ Report a Problem</span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 STATISTICS
+                 ================================================== -->
+
+            <div class="stats">
+
+
+                <div class="stat-card">
+
+                    <h2 id="totalReports">
+                        0
+                    </h2>
+
+                    <p>
+                        <span data-i18n="totalReports">Total Reports</span>
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <h2 id="openReports">
+                        0
+                    </h2>
+
+                    <p>
+                        Open
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <h2 id="progressReports">
+                        0
+                    </h2>
+
+                    <p>
+                        In Progress
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <h2 id="resolvedReports">
+                        0
+                    </h2>
+
+                    <p>
+                        Resolved
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 MAP
+                 ================================================== -->
+
+            <div class="map-section">
+
+
+                <div class="map-heading">
+
+                    <div>
+
+                        <p class="small-title">
+                            LIVE CIVIC PULSE
+                        </p>
+
+                        <h2>
+                            <span data-i18n="problemsAroundCity">Problems Around the City</span>
+                        </h2>
+
+                    </div>
+
+
+                    <div class="map-legend">
+
+                        <span>
+                            🔴 <span data-i18n="open">Open</span>
+                        </span>
+
+                        <span>
+                            🟡 <span data-i18n="working">Working</span>
+                        </span>
+
+                        <span>
+                            🟢 <span data-i18n="fixed">Fixed</span>
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div id="map"></div>
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 RECENT REPORTS
+                 ================================================== -->
+
+            <div class="reports-section">
+
+                <h2>
+                    <span data-i18n="recentReports">Recent Reports</span>
+                </h2>
+
+
+                <div id="recentReports">
+
+                    <p class="empty">
+
+                        No reports yet.
+                        Be the first to report a problem!
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ==================================================
+             REPORT PAGE
+             ================================================== -->
+
+        <section
+            id="reportPage"
+            class="page hidden"
+        >
+
+            <div class="form-container">
+
+
+                <h1>
+                    <span data-i18n="reportProblemTitle">Report a Problem</span>
+                </h1>
+
+
+                <p>
+                    <span data-i18n="reportHelp">Help your community by reporting a civic issue.</span>
+                </p>
+
+
+
+                <label for="issueType">
+                    <span data-i18n="issueType">Issue Type</span>
+                </label>
+
+
+                <select id="issueType">
+
+                    <option value="Streetlight" data-i18n="streetlight">💡 Broken Streetlight</option>
+
+                    <option value="Garbage" data-i18n="garbage">🗑️ Garbage Overflow</option>
+
+                    <option value="Water Leakage" data-i18n="water">💧 Water Leakage</option>
+
+                </select>
+
+
+
+                <label for="description">
+                    <span data-i18n="description">Description</span>
+                </label>
+
+
+                <textarea
+                    id="description"
+                    placeholder="Describe the problem..." data-i18n-placeholder="descriptionPlaceholder"
+                ></textarea>
+
+
+
+                <label for="photo">
+                    <span data-i18n="photoProof">Photo Proof</span>
+                </label>
+
+
+                <input
+                    type="file"
+                    id="photo"
+                    accept="image/*"
+                >
+
+
+
+                <label for="location">
+                    <span data-i18n="location">Location</span>
+                </label>
+
+
+                <div class="location-box">
+
+                    <input
+                        type="text"
+                        id="location"
+                        placeholder="Enter location or use GPS" data-i18n-placeholder="locationPlaceholder"
+                    >
+
+
+                    <button onclick="getLocation()">
+
+                        <span data-i18n="getLocation">📍 Get Location</span>
+
+                    </button>
+
+                </div>
+
+
+
+                <button
+                    class="submit-button"
+                    onclick="submitReport()"
+                >
+
+                    <span data-i18n="submitReport">Submit Report</span>
+
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             ADMIN PAGE
+             ================================================== -->
+
+        <section
+            id="adminPage"
+            class="page hidden"
+        >
+
+            <div class="admin-container">
+
+                <h1>
+                    <span data-i18n="municipalDashboard">Municipal Dashboard</span>
+                </h1>
+
+
+                <p>
+                    <span data-i18n="manageComplaints">Manage and resolve citizen complaints.</span>
+                </p>
+
+
+                <div id="adminReports"></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             CUSTOMER CARE
+             ================================================== -->
+
+        <section class="customer-care-section">
+
+            <div class="customer-care-card">
+
+                <div class="customer-care-icon">☎</div>
+
+                <div class="customer-care-content">
+                    <h2 data-i18n="customerCare">Customer Care</h2>
+                    <p data-i18n="customerCareHelp">Need help with a civic report? Contact our customer care agent.</p>
+                    <a id="customerCareNumber" class="customer-care-number" href="tel:18001234567">
+                        <span data-i18n="customerCareAgent">Customer Care Agent:</span> 1800-123-4567
+                    </a>
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+
+
+    <!-- ==================================================
+         LEAFLET JAVASCRIPT
+         ================================================== -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    ></script>
+
+
+    <!-- ==================================================
+         SMARTCIVIC JAVASCRIPT
+         ================================================== -->
+
+    <script src="script.js"></script>
+
+
+
+</body>
+
+</html>
